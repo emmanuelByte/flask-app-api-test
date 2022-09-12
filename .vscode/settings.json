@@ -1,0 +1,18 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "files.associations": {
+        "**/*.html": "html",
+        "**/templates/**/*.html": "html"
+    },
+    "todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
+    "todo-tree.tree.labelFormat": "${after}",
+    "files.exclude": {
+        "env/": true
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#322E16",
+        "titleBar.activeBackground": "#46401F",
+        "titleBar.activeForeground": "#FBFAF5"
+    }
+}

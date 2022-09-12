@@ -1,0 +1,13 @@
+gunicorn
+Flask
+flask-jwt-extended
+flask-cors
+flask-bcrypt
+pymongo
+flask-restful
+validators
+python-dotenv
+Flask-Script
+dnspython
+flask-mail
+requests
