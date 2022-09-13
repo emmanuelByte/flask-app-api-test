@@ -9,6 +9,7 @@ from flask_jwt_extended import JWTManager
 import config
 from api.auth.auth import auth as auth_blueprint
 from api.user.user import user as user_blueprint
+from api.template.template import template as template_blueprint
 from db import is_token_revoked
 
 
@@ -30,6 +31,7 @@ def create_app():
     # register blue prints
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(user_blueprint)
+    app.register_blueprint(template_blueprint)
 
 
     jwt = JWTManager(app)

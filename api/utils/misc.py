@@ -2,7 +2,7 @@ from flask.globals import current_app
 from werkzeug.local import LocalProxy
 
 
-max_per_page = LocalProxy(lambda: current_app.config.get('MAX_ITEMS_PER_PAGE'))
+max_per_page = LocalProxy(lambda: current_app.config.get('MAX_ITEMS_PER_PAGE') or 20) 
 
 # To use this code, make sure you
 #

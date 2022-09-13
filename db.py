@@ -1,3 +1,4 @@
+from re import template
 from flask_bcrypt import Bcrypt
 from flask import current_app, g
 from werkzeug.local import LocalProxy
@@ -26,6 +27,7 @@ def get_db():
 # Use LocalProxy to read the global db instance with just `db`
 db = LocalProxy(get_db)
 users: Collection = LocalProxy(lambda: db.users)
+templates: Collection = LocalProxy(lambda: db.templates)
 revoked_tokens: Collection = LocalProxy(lambda: db.revoked_tokens)
 
 ##########
@@ -53,6 +55,13 @@ USER_PROJECTION = {
     'password': 1,
     'email_verified': "$_email_verified",
 }
+TEMPLATE_PROJECTION = {
+    '_id': 1,
+    'body': 1,
+    'subject': 1,
+    'template_name': 1,
+    "author": 1,
+}
 
 def get_user(id: str = None, email: str = None) -> Optional[dict]:
     projection = USER_PROJECTION
@@ -69,7 +78,30 @@ def get_user(id: str = None, email: str = None) -> Optional[dict]:
         raise AssertionError('one of id and email must not be empty')
 
     return result
+def get_template(id: str = None) -> Optional[dict]:
+    projection = TEMPLATE_PROJECTION
+    if id is not None and  not (ObjectId.is_valid(str(id))):
+        return None
 
+    result = None
+    if id != None:
+        result = templates.find_one({'_id': as_oid(id)}, projection)
+   
+    else:
+        raise AssertionError('id  must not be empty')
+
+    return result
+
+def get_templates(uid,page=1, limit=20, filters={}):
+    query = {"author": str(uid)}
+    page = page if page > 0 else 1
+    if filters:
+        if 'search' in filters:
+            query.update({'$text': {'$search': filters.get("search")}})
+
+    templatess = list(templates.find(query).skip((page - 1) * limit).limit(limit))
+    total = templates.count_documents(query) or 0
+    return templatess, total
 
 def get_users(page=1, limit=20, filters={}):
     query = {}
@@ -113,6 +145,28 @@ def create_user(user: dict) -> Optional[dict]:
         return {'error': 'There was an error creating the user.'}
     except DuplicateKeyError:
         return {'error': 'A user with the given email already exists.'}
+def create_template(template: dict) -> Optional[dict]:
+    try:
+        if '_id' in template:
+            del template['_id']
+        result = templates.with_options(
+            write_concern=WriteConcern(w='majority')).insert_one(template)
+        if result.acknowledged:
+            return get_template(result.inserted_id)
+        return {'error': 'There was an error creating the template.'}
+    except DuplicateKeyError:
+        return {'error': 'A template with the given email already exists.'}
+def update_template(id, update_obj: dict) -> Optional[dict]:
+    assert isinstance(update_obj, dict)
+    if not (ObjectId.is_valid(str(id))):
+        return None
+    templates.update_one({'_id': as_oid(id)}, {'$set': update_obj})
+    return get_template(id=id)
+def delete_template(id) -> Optional[dict]:
+    if not (ObjectId.is_valid(str(id))):
+        return None
+    templates.delete_one({'_id': as_oid(id)})
+    return {'message': 'Template deleted successfully'}
 
 
 def get_bcrypt():

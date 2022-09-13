@@ -21,7 +21,7 @@ class Config(object):
     TESTING = False
     PROPAGATE_EXCEPTIONS = True
     CSRF_ENABLED = True
-    MONGODB_DATABASE_URI = os.environ.get("DATABASE_URL")
+    MONGODB_DATABASE_URI = os.environ.get("MONGO_DATABASE_URL")
     MONGODB_DATABASE_NAME = os.environ.get("DATABASE_NAME")
     
    

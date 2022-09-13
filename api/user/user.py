@@ -6,7 +6,7 @@ from flask_restful import Api, Resource, reqparse
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from werkzeug.local import LocalProxy
-from db import get_user, update_user
+from db import get_user
 from api.utils.response import restify
 
 
