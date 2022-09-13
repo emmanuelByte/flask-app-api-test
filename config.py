@@ -21,9 +21,8 @@ class Config(object):
     TESTING = False
     PROPAGATE_EXCEPTIONS = True
     CSRF_ENABLED = True
-    MONGODB_DATABASE_URI = os.environ.get("MONGO_DATABASE_URL")
-    MONGODB_DATABASE_NAME = os.environ.get("DATABASE_NAME")
-    
+    MONGODB_DATABASE_URI = os.environ.get("MONGODB_DATABASE_URI")
+    MONGODB_DATABASE_NAME = os.environ.get("MONGODB_DATABASE_NAME")
    
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=30)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)

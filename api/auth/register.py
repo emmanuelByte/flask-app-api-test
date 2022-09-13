@@ -1,15 +1,12 @@
 
-from flask.helpers import url_for
-from api.auth.utils import create_token
 from api.utils.response import restify
 from api.auth.errors import DuplicateUserError, SchemaValidationError
 from .auth import api, crypt
-from uuid import uuid4
 import validators
 
 from db import create_user, get_user
 from utils import validator
-from api.user.models import User, user_from_dict
+from api.user.models import User
 
 from flask_restful import Resource, reqparse
 
